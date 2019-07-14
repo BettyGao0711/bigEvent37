@@ -43,8 +43,11 @@
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
                     <div class="col-sm-10">
-                        <img src="images/2.jpg" alt="" class="user_pic">
-                        <input type="file" id="exampleInputFile" class="user_pic" name="user_pic">
+                        <img src="images/2.jpg" alt="" class="user_pic"><br>
+                        <label for="exampleInputFile">
+                            <img src="images/9356cd324263c27.jpg" width="60" alt="">
+                        </label>
+                        <input type="file" id="exampleInputFile" class="user_pic" name="user_pic" style="display:none">
                     </div>
                 </div>
 
@@ -79,7 +82,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-                    <button type="button" class="btn btn-primary">确认</button>
+                    <button type="button" class="btn btn-primary btn-conf">确认</button>
                 </div>
             </div>
         </div>
@@ -91,7 +94,7 @@
             $.get({
                 url: 'http://localhost:8000/admin/userinfo_get',
                 success: function (res) {
-                    //console.log(res);
+                    console.log(res);
                     if (res.code == 200) {
                         //把用户信息显示在表单对应的元素里
                         $('.username').val(res.data.username);
@@ -99,10 +102,25 @@
                         $('.email').val(res.data.email);
                         $('.password').val(res.data.password);
                         $('.user_pic').attr('src', res.data.user_pic);
+                        //可以用循环写 报错??
+                        // for(var key in res.data){
+                        //     $('.'+key).val(res.data[key]);
+                        // }
+                        // $('.user_pic').attr('src', res.data.user_pic);
 
                     }
                 }
             });
+            //美化上传图片的input
+            //用一个label标签关联input标签,要隐藏input标签,给label里加img,引入一个上传文件的图标
+            //点击这个图标就是相当于点击了这个input上传文件的input
+
+            //上传图片加预览效果
+            $('.user_pic').change(function(){
+                var url=URL.createObjectURL(this.files[0]);
+                $('.user_pic').attr('src', url);
+            });
+        
             //给修改按钮添加点击事件,点击修改时获取表单里的内容,发请求,用fromData传递
             $('.btn-edit').on('click', function (e) {
                 e.preventDefault();
@@ -114,19 +132,42 @@
                     contentType: false,
                     processData: false,
                     success: function (obj) {
-                        // console.log(obj);
+                        //console.log(obj);
                         if (obj.code == 200) {
                             //服务器响应回来的结果是修改成功时(即修改后的数据已在数据库保存了)
                             //弹出模态框
-                            $('.modal-body').text(obj.msg+'!');
+                            $('.modal-body').text(obj.msg + '!');
                             $('#myModal').modal();//调用模态框的方法
+                            //给模态框的确认按钮添加点击事件
+                            //点击之后就要关闭模态框,然后首页的用户信息和头像那些也要显示最先数据
+                            //可以刷新首页,也可以重新发送请求
+                            $('.btn-conf').on('click', function () {
+                                $('#myModal').modal('hide');
+                                //重新加载首页,但是是刷新的效果,用户体验不好
+                                //现在网页是在iframe里面,所以要找到父网页,网址栏地址再重新加载
+                                 parent.location.href='index.html';
+                                //parent.location.reload();//重新加载当前网页???有问题
 
+                                //首页重新发送请求
+                                //  $.get({
+                                //     url: 'http://localhost:8000/admin/getuser',
+                                //     success: function (res) {
+                                //         // console.log(res);
+                                //         if (res.code == 200) {
+                                //             parent.$('.user_info').children('img').attr('src', res.data.user_pic);
+                                //             parent.$('.user_info').children('span').html('欢迎&nbsp;&nbsp;' + res.data.nickname);
+                                //             parent.$('.user_center_link').children('img').attr('src', res.data.user_pic);
+                                //         }
+                                //     }
+                                // });//报错??
+                              
+
+                            });
                         }
                     }
                 })
             });
-            //给模态框的确认按钮添加点击事件
-            //点击之后
+
         });
     </script>
 </body>
