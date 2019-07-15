@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -30,9 +31,9 @@
                             <option>爱旅行</option>
                         </select>
                         <select id="selStatus" name="" class="form-control input-sm">
-                            <option>所有状态</option>
-                            <option value="drafted">草稿</option>
-                            <option value="published">已发布</option>
+                            <option value="">所有状态</option>
+                            <option value="草稿">草稿</option>
+                            <option value="已发布">已发布</option>
                         </select>
                         <button id="btnSearch" class="btn btn-default btn-sm">筛选</button>
                     </form>
@@ -267,12 +268,70 @@
 
         </div>
     </div>
+ <script src="js/template-web.js"></script>
+ <!-- 建模板 -->
+ <script type="text/html" id="tpl">
+ <option value="">所有分类</option>
+ {{each data v}}
+  <option value="{{v.id}}">{{v.name}}</option>
+ {{/each}}
+ </script>
 
     <script>
         // 设置左侧菜单
         $('#release_btn').click(function(){
             window.parent.setMenu(1,1);
         })
+    </script>
+    <script>
+   $(function(){
+  //发请求,获取所有的文章类别
+  $.get({
+        url:'http://localhost:8000/admin/category_search',
+        success:function(res){
+            //console.log(res);
+            //拿到结果/文章类别,要显示在下拉列表里面
+            //每一个文章类别都是一个对象,对应一个option
+            if(res.code==200){
+            var html=template('tpl',res);
+            $('#selCategory').html(html);
+            }
+
+        }
+    })
+   //点击筛选按钮,可以获取分类-状态 所对应的文章,并显示在页面上
+ $('#btnSearch').on('click',function(){
+    var category=$('#selCategory').val();//获取显示出来的option的value值,所有分类的value是空,option的value是存起来的文章类别的id
+    var status=$('#selStatus').val();//所有分类是空,草稿的value是草稿,已发布的value是已发布
+    // $.get({
+    //     url:'http://localhost:8000/admin/search',
+    //     data: {
+
+    //     }
+    //     success:function(obj){
+
+    //     }
+    // })//未完成
+
+
+
+ });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   });
     </script>
 
 </body>
