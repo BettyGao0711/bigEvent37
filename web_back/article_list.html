@@ -61,7 +61,7 @@
 
 
                     <tr>
-                        
+
                         <td>王积千造统最头</td>
                         <td>杰克</td>
                         <td>奇趣事</td>
@@ -80,7 +80,7 @@
 
 
                     <tr>
-                     
+
                         <td>级电使正回</td>
                         <td>肉丝</td>
                         <td>爱旅行</td>
@@ -99,7 +99,7 @@
 
 
                     <tr>
-                       
+
                         <td>近难领管年算</td>
                         <td>杰克</td>
                         <td>会生活</td>
@@ -118,7 +118,7 @@
 
 
                     <tr>
-                       
+
                         <td>龙大实究</td>
                         <td>杰克</td>
                         <td>未分类</td>
@@ -137,7 +137,7 @@
 
 
                     <tr>
-                      
+
                         <td>算性得走来拉</td>
                         <td>肉丝</td>
                         <td>奇趣事</td>
@@ -156,7 +156,7 @@
 
 
                     <tr>
-                      
+
                         <td>几平会出气</td>
                         <td>管理员</td>
                         <td>奇趣事</td>
@@ -175,7 +175,7 @@
 
 
                     <tr>
-                      
+
                         <td>世团先证型角</td>
                         <td>杰克</td>
                         <td>奇趣事</td>
@@ -194,7 +194,7 @@
 
 
                     <tr>
-                      
+
                         <td>构更反步五</td>
                         <td>肉丝</td>
                         <td>奇趣事</td>
@@ -213,7 +213,7 @@
 
 
                     <tr>
-                       
+
                         <td>组方些</td>
                         <td>肉丝</td>
                         <td>会生活</td>
@@ -232,7 +232,7 @@
 
 
                     <tr>
-                      
+
                         <td>日做发光成</td>
                         <td>管理员</td>
                         <td>爱旅行</td>
@@ -253,33 +253,33 @@
             </table>
             <!-- bootstrap分页器 -->
             <div class="row text-center">
-            <ul class="pagination pagination-sm">
-                <li class="page-item first disabled"><a href="#" class="page-link">首页</a></li>
-                <li class="page-item prev disabled"><a href="#" class="page-link">上一页</a></li>
-                <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                <li class="page-item"><a href="#" class="page-link">3</a></li>
-                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                <li class="page-item"><a href="#" class="page-link">6</a></li>
-                <li class="page-item"><a href="#" class="page-link">7</a></li>
-                <li class="page-item next"><a href="#" class="page-link">下一页</a></li>
-                <li class="page-item last"><a href="#" class="page-link">尾页</a></li>
-            </ul>
-        </div>
+                <ul class="pagination pagination-sm">
+                    <li class="page-item first disabled"><a href="#" class="page-link">首页</a></li>
+                    <li class="page-item prev disabled"><a href="#" class="page-link">上一页</a></li>
+                    <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                    <li class="page-item"><a href="#" class="page-link">2</a></li>
+                    <li class="page-item"><a href="#" class="page-link">3</a></li>
+                    <li class="page-item"><a href="#" class="page-link">4</a></li>
+                    <li class="page-item"><a href="#" class="page-link">5</a></li>
+                    <li class="page-item"><a href="#" class="page-link">6</a></li>
+                    <li class="page-item"><a href="#" class="page-link">7</a></li>
+                    <li class="page-item next"><a href="#" class="page-link">下一页</a></li>
+                    <li class="page-item last"><a href="#" class="page-link">尾页</a></li>
+                </ul>
+            </div>
 
         </div>
     </div>
- <script src="js/template-web.js"></script>
- <!-- 建模板 -->
- <script type="text/html" id="tpl">
+    <script src="js/template-web.js"></script>
+    <!-- 建模板 -->
+    <script type="text/html" id="tpl">
  <option value="">所有分类</option>
  {{each data v}}
   <option value="{{v.id}}">{{v.name}}</option>
  {{/each}}
  </script>
- <!-- 创建显示文章信息的模板 -->
- <script type="text/html" id="tpl2">
+    <!-- 创建显示文章信息的模板 -->
+    <script type="text/html" id="tpl2">
     {{each data v}}
   <tr>
                       
@@ -302,94 +302,132 @@
 
     <script>
         // 设置左侧菜单
-        $('#release_btn').click(function(){
-            window.parent.setMenu(1,1);
+        $('#release_btn').click(function () {
+            window.parent.setMenu(1, 1);
         })
     </script>
     <script>
-   $(function(){
-  //发请求,获取所有的文章类别,显示在下拉菜单
-  $.get({
-        url:'http://localhost:8000/admin/category_search',
-        success:function(res){
-            //console.log(res);
-            //拿到结果/文章类别,要显示在下拉列表里面
-            //每一个文章类别都是一个对象,对应一个option
-            if(res.code==200){
-            var html=template('tpl',res);
-            $('#selCategory').html(html);
+        $(function () {
+            //发请求,获取所有的文章类别,显示在下拉菜单
+            $.get({
+                url: 'http://localhost:8000/admin/category_search',
+                success: function (res) {
+                    //console.log(res);
+                    //拿到结果/文章类别,要显示在下拉列表里面
+                    //每一个文章类别都是一个对象,对应一个option
+                    if (res.code == 200) {
+                        var html = template('tpl', res);
+                        $('#selCategory').html(html);
+                    }
+
+                }
+            })
+
+
+            //一进入页面,就要查询所有分类里的文章
+            //手动触发筛选的点击事件
+            //代码执行到这里的时候,一进入页面发送的请求(获取所有的文章类别显示在下拉菜单)可能还没有响应回来结果渲染在页面上,下面的代码触发筛选的点击事件,获取前面两个下拉菜单的值的时候,获取的是页面上默认的(不是发送请求获取的),
+           //$('#btnSearch').trigger('click');//进入页面,前面两个下拉列表默认的option都是第一个,所有分类
+
+            //分页插件
+            //方法
+            //最大页码固定是22页
+            // $('.pagination').twbsPagination({
+            //         totalPages: 22,
+            //         visiblePages: 5,
+            //         first: '第一页',
+            //         prev:'上一页',
+            //         next:'下一页',
+            //         last:'最后一页',
+            //         onPageClick: function (event, page) { //点击页签的回调函数
+            //         //event点击时触发的事件对象
+            //         //page点击的页码
+            //         //在这里,我们点击哪一个页码,就要显示哪一页的文章信息.发送ajax请求
+            //             get(page); 
+            //         }
+
+            //     });
+
+         //   声明一个变量,记录当前获取的总的页码数,
+            var myTotalPage = 20;//先随便赋值一个页码
+            //动态生成页码:内容有几页就生成几页的页码
+            var $pagination = $('.pagination');
+            var defaultOpts = {
+                totalPages: myTotalPage,//最大的页码
+                visiblePages: 5,
+                first: '第一页',
+                prev: '上一页',
+                next: '下一页',
+                last: '最后一页',
+                onPageClick: function (event, page) { //点击页签的回调函数
+                    //event点击时触发的事件对象
+                    //page点击的页码
+                    //在这里,我们点击哪一个页码,就要显示哪一页的文章信息.发送ajax请求
+                    get(page);
+                }
+            };
+            $pagination.twbsPagination(defaultOpts);
+
+
+            //点击筛选时要发送的请求,封装这个方法
+            function get(myPage) {
+                var category = $('#selCategory').val();//获取显示出来的option的value值,所有分类的value是空,option的value是存起来的文章类别的id
+                var status = $('#selStatus').val();//所有分类是空,草稿的value是草稿,已发布的value是已发布
+                $.get({
+                    url: 'http://localhost:8000/admin/search',
+                    data: {
+                        type: category,
+                        state: status,
+                        page: myPage,//页码为空不写就返回第一页的文章信息,这里不写死,用变量,调用这个函数发送ajax请求的时候就传实参,想返回第几页的就传几
+                        perpage: 5
+
+                    },
+                    success: function (backData) {
+                        // console.log(backData);
+                        if (backData.code == 200) {
+                            var result = template('tpl2', backData);
+                            $('tbody').html(result);
+
+                            //获取到文章的总页数
+                            var totalPages = backData.totalPage;
+
+                            if (myTotalPage != totalPages) {
+                                //获取到的文章总页码赋值给myTotalPage;
+                                myTotalPage = totalPages;
+
+                                //获取当前页码,当前显示是第几页
+                                var currentPage = $pagination.twbsPagination('getCurrentPage');
+
+                                $pagination.twbsPagination('destroy');//重绘,每次根据文章的总页数来生成对应的页码数,destroy会调用onPageClick方法
+
+                                $pagination.twbsPagination($.extend({}, defaultOpts, {
+                                    startPage: 1,
+                                    totalPages: totalPages
+                                }));
+
+                            }
+
+                        }
+                    }
+                });
             }
 
-        }
-    })
+            //点击筛选按钮,可以获取分类-状态 所对应的文章,并显示在页面上
+            $('#btnSearch').on('click', function (e) {
+                //button默认type是submit,可以提交表单,所以要阻止默认行为
+                e.preventDefault();
+                //发送请求
+                get(1);
+                //分页器的页码也要显示第一页
+                //触发分页器的首页的点击事件
+                $('.page-link').trigger('click');
 
-    //发送请求,封装方法
-  function get(myPage){
-    var category=$('#selCategory').val();//获取显示出来的option的value值,所有分类的value是空,option的value是存起来的文章类别的id
-    var status=$('#selStatus').val();//所有分类是空,草稿的value是草稿,已发布的value是已发布
-    $.get({
-        url:'http://localhost:8000/admin/search',
-        data: {
-            type: category,
-            state: status,
-            page: myPage//页码为空不写就返回第一页的23文章信息,这里不写死,用变量,调用这个函数发送ajax请求的时候就传实参,想返回第几页的就传几
+            });
+
+
+            //疑问:为什么页面一打开就可以获取所有分类的文章并显示?筛选按钮的点击事件发送请求不是要点击才会触发吗????????
         
-        },
-        success:function(obj){
-           // console.log(obj);
-            if(obj.code==200){
-                var result=template('tpl2',obj);
-                $('tbody').html(result);
-            }
-        }
-    });
-  }
-   //点击筛选按钮,可以获取分类-状态 所对应的文章,并显示在页面上
- $('#btnSearch').on('click',function(e){
-      //button默认type是submit,可以提交表单,所以要阻止默认行为
-     e.preventDefault();
-    //发送请求
-    get(1);
-
- });
-
- //一进入页面,就要查询所有分类里的文章
-//手动触发筛选的点击事件
-//代码执行到这里的时候,一进入页面发送的请求(获取所有的文章类别显示在下拉菜单)可能还没有响应回来结果渲染在页面上,下面的代码触发筛选的点击事件,获取前面两个下拉菜单的值的时候,获取的是页面上默认的(不是发送请求获取的),
-$('#btnSearch').trigger('click');//进入页面,前面两个下拉列表默认的option都是第一个,所有分类
-
-//分页插件
-//方法
-$('.pagination').twbsPagination({
-        totalPages: 22,
-        visiblePages: 5,
-        first: '第一页',
-        prev:'上一页',
-        next:'下一页',
-        last:'最后一页',
-        onPageClick: function (event, page) { //点击页签的回调函数
-        //event点击时触发的事件对象
-        //page点击的页码
-        //在这里,我们点击哪一个页码,就要显示哪一页的文章信息.发送ajax请求
-            get(page); 
-        }
-        
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   });
+        });
     </script>
 
 </body>
