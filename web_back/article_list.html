@@ -294,7 +294,7 @@
 
                       <td class="text-center">
                           <a href="post-edit.html?id=995" data-id="{{v.id}}" class="btn btn-default btn-xs">编辑</a>
-                          <a href="javascript:deleteTr( 995 );" data-id="{{v.id}}" class="btn btn-danger btn-xs">删除</a>
+                          <a href="javascript:;" data-id="{{v.id}}" class="btn btn-danger btn-xs btn-delete">删除</a>
                       </td>
                   </tr>
                   {{/each}}
@@ -363,7 +363,9 @@
                     //event点击时触发的事件对象
                     //page点击的页码
                     //在这里,我们点击哪一个页码,就要显示哪一页的文章信息.发送ajax请求
-                    get(page);
+                   // console.log(234);
+                   // console.log(page);
+                    get(page);//page默认值为1,页面一打开就会调用
                 }
             };
             $pagination.twbsPagination(defaultOpts);
@@ -391,12 +393,14 @@
                             //获取到文章的总页数
                             var totalPages = backData.totalPage;
 
+                            //获取点击的当前页码
+                            window.currentPage = $pagination.twbsPagination('getCurrentPage');
+
                             if (myTotalPage != totalPages) {
                                 //获取到的文章总页码赋值给myTotalPage;
                                 myTotalPage = totalPages;
-
-                                //获取当前页码,当前显示是第几页
-                                var currentPage = $pagination.twbsPagination('getCurrentPage');
+                                 //获取点击的当前页码
+                                //var currentPage = $pagination.twbsPagination('getCurrentPage');这个方法可以获取当前点击的页码,但是只有重绘页码条的时候才会进入这里调用,所以拿到外面,并且暴露给window
 
                                 $pagination.twbsPagination('destroy');//重绘,每次根据文章的总页数来生成对应的页码数,destroy会调用onPageClick方法
 
@@ -424,9 +428,27 @@
 
             });
 
-
             //疑问:为什么页面一打开就可以获取所有分类的文章并显示?筛选按钮的点击事件发送请求不是要点击才会触发吗????????
-        
+            
+            //给删除按钮添加点击事件,事件委托
+            $('tbody').on('click','.btn-delete',function(){
+                var id=$(this).attr('data-id');
+              if(confirm('请问是否确定要删除吗')){
+                $.get({
+                    url:'http://localhost:8000/admin/article_delete',
+                    data:{id:id},
+                    success:function(res){
+                       // console.log(res);
+                       if(res.code==200){
+                           //删除成功之后,要重新发请求,但是还是要显示当前页面(页码点击的页)的文章信息
+                           get(currentPage);
+
+                       }
+                    }
+                })
+              }
+            })
+
         });
     </script>
 
