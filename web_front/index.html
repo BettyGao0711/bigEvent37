@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
+    <script src="js/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
@@ -55,6 +56,7 @@
 
     <div class="main_con clearfix">
         <div class="left_con">
+            <!-- 焦点新闻,数据从后台获取 -->
             <ul class="focus_list">
                 <li class="first">
                     <a href="#"><img src="images/pic01.jpg" alt=""></a>
@@ -220,7 +222,42 @@
         <p>CopyRight © 2019 深圳大事件信息技术股份有限公司   All Rights Reserved</p>
         <p>电话：0755-****888    粤ICP备*******8号</p>
     </div>
+<script src="js/template-web.js"></script>
+<script type="text/html" id="tpl">
+ {{each data v}}
+ {{if $index==0 }}
+ <li class="first">
+     {{else }}
+      <li>
+          {{/if}}
+    <a href="article.html?id={{v.id}}"><img src="{{v.cover}}" alt=""></a>
+    <p>{{v.title}}</p>
+</li>
+ {{/each}}
+</script>
+<script>
+$(function(){
+    //页面一打开就发请求 获取数据
+    //显示最新的5篇新闻
+    $.get({
+        url:'http://localhost:8000/admin/search',
+        data:{
+            state: '草稿',
+            // page: 1,
+            perpage:5
+        },
+        success:function(res){
+           // console.log(res);
+           var html=template('tpl',res);
+            $('.focus_list').html(html);
 
+        }
+    })
+
+
+})
+
+</script>
 </body>
 
 </html>
