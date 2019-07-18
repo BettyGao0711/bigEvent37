@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
     <script src="js/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/josecebe-twbs-pagination-5103bc4/jquery.twbsPagination.min.js"></script>
+    <script src="js/jquery.twbsPagination.min.js""></script>
 </head>
 
 <body>
@@ -293,7 +293,7 @@
 
 
                       <td class="text-center">
-                          <a href="post-edit.html?id=995" data-id="{{v.id}}" class="btn btn-default btn-xs">编辑</a>
+                          <a href="article_edit.html?id={{v.id}}" class="btn btn-default btn-xs">编辑</a>
                           <a href="javascript:;" data-id="{{v.id}}" class="btn btn-danger btn-xs btn-delete">删除</a>
                       </td>
                   </tr>
@@ -428,7 +428,8 @@
 
             });
 
-            //疑问:为什么页面一打开就可以获取所有分类的文章并显示?筛选按钮的点击事件发送请求不是要点击才会触发吗????????
+            //疑问:为什么页面一打开就可以获取所有分类的文章并显示?
+            //因为上面的onpageclick一打开就会调用,page默认值为1,所以页面一打开就发送了请求
             
             //给删除按钮添加点击事件,事件委托
             $('tbody').on('click','.btn-delete',function(){
@@ -449,6 +450,11 @@
               }
             })
 
+        //编辑文章
+        //首先要获取这个文章的信息显示在编辑的页面,然后用户再修改
+        //获取用户修改的内容,然后发请求,修改数据库里的信息
+        //修改成功之后,回到文章列表的页面,重新发请求
+        
         });
     </script>
 

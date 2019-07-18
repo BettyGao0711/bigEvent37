@@ -15,6 +15,7 @@
     <script src="js/jedate/js/jedate.js"></script>
     <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <script src="js/moment.js"></script>
 </head>
 
 <body>
@@ -27,20 +28,20 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" value="文章标题文字">
+                        <input type="email" class="form-control title" name="title" id="inputEmail3" value="文章标题文字">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
                         <img src="images/pic06.jpg" class="article_cover">
-                        <input type="file" id="exampleInputFile">
+                        <input type="file" name="cover" id="exampleInputFile">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control">
+                        <select class="form-control article-cate" name="type">
                             <option>类别一</option>
                             <option>类别二</option>
                             <option>类别三</option>
@@ -54,7 +55,7 @@
                     <div class="col-sm-4">
 
                         <div class="input-group">
-                            <input type="text" class="form-control" value="2019-05-17" id="dateinput">
+                            <input type="text" class="form-control" value="2019-05-17" id="dateinput" name="date">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"
                                     onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
@@ -66,18 +67,98 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="rich_content" name="content" placeholder="文章内容" value="文章内容">
+                        <input type="text" class="form-control" id="rich_content" placeholder="文章内容"
+                            value="文章内容">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">修改</button>
+                        <button type="submit" class="btn btn-success btn-submit">修改</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+    <script src="js/template-web.js"></script>
+    <!-- 建模板 -->
+    <script type="text/html" id="tpl">
+     {{each data v}}
+      <option value="{{v.id}}">{{v.name}}</option>
+     {{/each}}
+     </script>
+    <script>
+        //编辑文章
+        //首先要获取这个文章的信息显示在编辑的页面,发请求获取,请求参数是文章id,在地址栏传递了,可以通过location获取
+        //获取用户修改的内容,然后发请求,修改数据库里的信息
+        //修改成功之后,回到文章列表的页面,重新发请求
 
+        //上传图片预览
+        $('#exampleInputFile').change(function () {
+            var url = URL.createObjectURL(this.files[0]);
+            $('.article_cover').attr('src', url);
+        });
+        
+        //一打开页面发请求,获取到所有的文章类别,然后渲染在下拉菜单里
+         $.get({
+                url: 'http://localhost:8000/admin/category_search',
+                success: function (res) {
+                    //console.log(res);
+                    //拿到结果/文章类别,要显示在下拉列表里面
+                    //每一个文章类别都是一个对象,对应一个option
+                    if (res.code == 200) {
+                        var html = template('tpl', res);
+                        $('.article-cate').html(html);
+                    }
+
+                }
+            })
+        //禁用修改时间
+         $('#dateinput').attr('disabled',true);
+         $('.btn-default').attr('disabled', true);
+
+         //显示当前时间在input表单里
+         var date=moment().format('YYYY-MM-DD');
+         $('#dateinput').val(date);
+
+        var id = location.search.split('=')[1];
+        console.log(id);
+        $.get({
+            url: "http://localhost:8000/admin/search",
+            data: { id: id },
+            success: function (res) {
+                //console.log(res);
+                $('.title').val(res.data.title);
+                $('.article_cover').attr('src', res.data.cover);
+                $('.article-cate').val(res.data.type);
+                $('#rich_content').val(res.data.content);
+
+            }
+        })
+        //给修改添加点击事件
+        $('.btn-submit').on('click',function(e){
+            e.preventDefault();
+            var fm=new FormData($('form')[0]);
+            //获取富文本编辑器里面的内容
+            var content= tinyMCE.activeEditor.getContent();
+            fm.append('content',content);
+            fm.append('id',id);
+           // console.log(fm.get('title'));
+            $.post({
+                url:'http://localhost:8000/admin/article_edit',
+                data:fm,
+                contentType:false,
+                processData:false,
+                success:function(obj){
+                    //console.log(obj);
+                   if(obj.code==200){
+                       alert('修改成功~~');
+                   }
+                }
+            })
+        })
+
+
+    </script>
 </body>
 
 </html>

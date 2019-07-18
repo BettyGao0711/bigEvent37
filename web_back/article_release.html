@@ -122,7 +122,10 @@ $('.btn-release').on('click',function(e){
      //获取这个页面form表单里的所有内容,然后发请求
      var fm=new FormData($('form')[0]);
      //获取了表单里的内容,还差两个参数,content文章内容和state文章状态,状态后台接口写死为草稿
-     fm.append('content',tinyMCE.activeEditor.getContent());
+     // fm.append('content',tinyMCE.activeEditor.getContent());//或者用这个方法,不给上面的textarea加name属性,这样fm就不会获取到,直接给它追加一个content请求参数,然后value就是获取到的富文本编辑器里用户输入的内容.
+     fm.set('content', tinyMCE.activeEditor.getContent());//fm获取了name="content",value是textarea里面默认的内容,把这个key的value替换成用户在富文本编辑器里面输入的内容.
+     // var content = "默认值";
+     // content = "新内容";
      fm.append('state','草稿');
      $.post({
         url:'http://localhost:8000/admin/article_publish',
@@ -133,7 +136,7 @@ $('.btn-release').on('click',function(e){
            // console.log(backData);
            if(backData.code==201){
                alert('发布成功!');
-               location.href="index.html";
+               parent.location.href="index.html";
            }
         }
      })
