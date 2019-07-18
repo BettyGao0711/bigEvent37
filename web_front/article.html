@@ -204,7 +204,63 @@
         <p>CopyRight © 2019 深圳大事件信息技术股份有限公司 All Rights Reserved</p>
         <p>电话：0755-****888 粤ICP备*******8号</p>
     </div>
+<script src="js/jquery-1.12.4.min.js"></script>
+<script src="js/template-web.js"></script>
+<!-- 创建模板 -->
+<script type="text/html" id="tpl">
+{{author}} 发布于 {{date}}&nbsp;&nbsp;&nbsp;分类: {{typeName}}&nbsp; &nbsp; &nbsp;阅读: {{read}}&nbsp; &nbsp; &nbsp;评论: ({{comment}})
+</script>
+<script>
+var id=location.search.split('=')[1];
+// console.log(id);
+//发送请求,获取文章的详细信息
+$.get({
+    url:'http://localhost:8000/admin/search',
+    data: {id:id},
+    success:function(res){
+    //console.log(res);
+      if(res.code==200){
+          //发请求,获取所有的文章类别
+          $.get({
+              url: 'http://localhost:8000/admin/category_search',
+              success: function (backData) {
+                    if(backData.code==200){
+                        var typeName=findTypeById(backData.data,res.data.type);
+                        // $('.article_info').html(res.data.author + ' 发布于 ' + res.data.date + '&nbsp;&nbsp;&nbsp;分类: ' +typeName+'&nbsp; &nbsp; &nbsp;'+'阅读: '+res.data.read+'&nbsp; &nbsp; &nbsp;'+'评论: '+'('+res.data.comment+')');
+                        res.data.typeName=typeName;
+                        var html=template('tpl',res.data);
+                        $('.article_info').html(html);
 
+                    }
+              }
+          })
+          
+           $('.article_con').html(res.data.content);
+           $('.article_title').text(res.data.title);
+           
+      }
+    }
+})
+//通过某个文章的type id找到文章类别对应的名字typeName
+// "data":[
+// {"id":1,"name":"科学","slug":"changelife"},
+// {"id":2,"name":"八卦","slug":"fly"},
+// {"id":5,"name":"奇异","slug":"outhome"},
+// {"id":8,"name":"军事","slug":"junshi"},
+// {"id":14,"name":"国际","slug":"guoji"},
+// {"id":31,"name":"嘿嘿","slug":"heihei"}
+// ]
+function findTypeById(data,id){
+    for(var i=0;i<data.length;i++){
+        if(data[i].id==id){
+            return data[i].name;
+        }
+    }
+    //没有匹配的分类
+    return '未分类';
+}
+
+</script>
 </body>
 
 </html>
